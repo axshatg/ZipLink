@@ -26,7 +26,7 @@
         <div class="url-container">
           <a href="<%= short_url %>"><%= short_url %></a>
           <button class="btn btn-primary copy-button btn-sm" data-link="<%= short_url %>">Copy</button>
-          <a href="<%= short_url %>" class="btn btn-success redirect-button btn-sm" target="_blank">Visit</a>
+          <!-- <a href="{<= short_url %>}" class="btn btn-success redirect-button btn-sm" target="_blank">Visit</a> -->
         </div>
 
         <% if (locals.qr_code_url) { %>
@@ -40,7 +40,7 @@
 
     <script>
       const copyButtons = document.querySelectorAll(".copy-button");
-      const visitButtons = document.querySelectorAll(".redirect-button");
+      // const visitButtons = document.querySelectorAll(".redirect-button");
 
       copyButtons.forEach(button => {
         button.addEventListener("click", () => {
@@ -50,13 +50,13 @@
         });
       });
 
-      visitButtons.forEach(button => {
-        button.addEventListener("click", () => {
-          const link = button.getAttribute("href");
-          const reloadParam = "?reload=true"; // Parameter indicating reload action
-          window.open(link + reloadParam, "_blank");
-        });
-      });
+      // visitButtons.forEach(button => {
+      //   button.addEventListener("click", () => {
+      //     const link = button.getAttribute("href");
+      //     const reloadParam = "?reload=true"; // Parameter indicating reload action
+      //     window.open(link + reloadParam, "_blank");
+      //   });
+      // });
 
       function copyToClipboard(text) {
         const dummyTextArea = document.createElement("textarea");
