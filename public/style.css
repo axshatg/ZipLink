@@ -4,22 +4,33 @@ body {
   display: grid;
   place-items: center;
   font-family: "Nunito", sans-serif;
-  background-color: #e8eaf6;
+  background-color: #f3f5fd;
   color: #1a237e;
+  padding: 40px 8px;
+}
+
+h1 {
+  font-weight: 700;
+  font-size: 2.5rem;
+  margin-bottom: 15px;
 }
 
 .short-url {
   margin: 20px;
+  padding-bottom: 50px;
 }
 
 .short-url a {
   color: #1a237e;
   text-decoration: none;
+
 }
 
 input[type="url"] {
   display: block;
-  width: 40vw;
+  width: 45vw;
+  padding: 17px 8px;
+  margin-bottom: 15px;
 }
 
 input[type="submit"] {
@@ -36,4 +47,57 @@ input[type="submit"] {
 
 p.error {
   color: #f44336;
+}
+
+.input-submit{
+  background-color: #3f51b5;
+}
+
+.copy-button, 
+.redirect-button {
+  background-color: #3f51b5;
+  color: white !important; /* Apply the text color forcefully */
+  padding: 4px 8px;
+  font-family: "Nunito", sans-serif;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+/* Add custom classes for rounded edges */
+.custom-rounded {
+  border-radius: 20px; /* Increase border-radius for more rounded edges */
+  padding: 8px 16px; /* Adjust padding for button size */
+}
+
+
+/* Styles for QR code image */
+.qr-code {
+  display: block;
+  margin: 20px auto;
+  border-radius: 5px;
+  padding: 10px;
+  background-color: white;
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
+}
+
+.qr-text {
+  display: block;
+  text-align: center;
+  font-size: 16px;
+  /* margin-top: 5px;
+  margin-bottom: 3px; */
+  padding-top: 15px; /* Add padding of 20px */
+}
+
+.url-container {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Add 10px gap between URL and button */
+}
+
+/* Media query to adjust QR code size on smaller screens */
+@media (max-width: 600px) {
+  .qr-code {
+    padding: 5px;
+  }
 }

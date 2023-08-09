@@ -5,6 +5,7 @@ const createHttpError = require("http-errors");
 const mongoose = require("mongoose");
 const path = require("path");
 const ShortUrl = require("./models/urlModel");
+const qr = require("qrcode"); // Import the qrcode package
 
 const app = express();
 app.use(express.static(path.join(__dirname, "public")));
@@ -34,22 +35,27 @@ app.post("/", async (req, res, next) => {
     }
     const urlExists = await ShortUrl.findOne({ url });
     if (urlExists) {
+      const shortUrl = `${req.headers.host}/${urlExists.shortId}`;
+      const qrCodeUrl = await generateQRCode(shortUrl);
       res.render("index", {
-        // short_url: `${req.hostname}/${urlExists.shortId}`,
-        short_url: `${req.headers.host}/${urlExists.shortId}`,
+        short_url: shortUrl,
+        qr_code_url: qrCodeUrl,
       });
       return;
     }
-    const shortUrl = new ShortUrl({ url: url, shortId: shortId.generate() });
+    const shortIdValue = shortId.generate();
+    const shortUrl = new ShortUrl({ url: url, shortId: shortIdValue });
     const result = await shortUrl.save();
+    const qrCodeUrl = await generateQRCode(`${req.headers.host}/${shortIdValue}`);
     res.render("index", {
-      // short_url: `${req.hostname}/${urlExists.shortId}`,
       short_url: `${req.headers.host}/${result.shortId}`,
+      qr_code_url: qrCodeUrl,
     });
   } catch (error) {
     next(error);
   }
 });
+
 
 app.get("/:shortId", async (req, res, next) => {
   try {
@@ -74,3 +80,17 @@ app.use((err, req, res, next) => {
 });
 
 app.listen(3000, () => console.log("🌏 on port 3000..."));
+
+// Function to generate QR code
+async function generateQRCode(url) {
+  try {
+    const qrCodeUrl = await qr.toDataURL(url);
+    return qrCodeUrl;
+  } catch (error) {
+    console.error("Error generating QR code:", error);
+    return null;
+  }
+}
+
+
+

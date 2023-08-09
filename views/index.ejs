@@ -2,26 +2,78 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <link rel="icon" href="./favicon.png" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="./style.css" />
-    <title>Url shortner</title>
+    <title>ZipLink</title>
   </head>
   <body>
-    <h1>URL Shortner</h1>
+    <h1>ZipLink</h1>
 
     <% if (locals.error) { %>
-    <p class="error"><%= error %></p>
+      <p class="error"><%= error %></p>
     <% } %>
 
-    <form action="/" method="post">
-      <input type="url" name="url" id="url" placeholder="url here..." />
-      <input type="submit" value="create url" />
+    <form action="/" method="post" class="text-center"> <!-- Add the text-center class here -->
+      <input class="form-control" type="url" name="url" id="url" placeholder="Paste your URL here..." />
+      <button type="submit" class="btn input-submit btn-primary create-button btn-sm">Zip URL</button>
     </form>
+
 
     <div class="short-url">
       <% if (locals.short_url) { %>
-      <a href="<%= short_url %>"><%= short_url %> </a>
+        <div class="url-container">
+          <a href="<%= short_url %>"><%= short_url %></a>
+          <button class="btn btn-primary copy-button btn-sm" data-link="<%= short_url %>">Copy</button>
+          <a href="<%= short_url %>" class="btn btn-success redirect-button btn-sm" target="_blank">Visit</a>
+        </div>
+
+        <% if (locals.qr_code_url) { %>
+          <!-- Display the QR code -->
+          <p class="qr-text">Or scan this QR code:</p>
+          <img src="<%= locals.qr_code_url %>" alt="QR Code" class="qr-code" />
+        <% } %>
       <% } %>
     </div>
+
+
+    <script>
+      const copyButtons = document.querySelectorAll(".copy-button");
+      const visitButtons = document.querySelectorAll(".redirect-button");
+
+      copyButtons.forEach(button => {
+        button.addEventListener("click", () => {
+          const link = button.getAttribute("data-link");
+          copyToClipboard(link);
+          updateButtonContent(button);
+        });
+      });
+
+      visitButtons.forEach(button => {
+        button.addEventListener("click", () => {
+          const link = button.getAttribute("href");
+          const reloadParam = "?reload=true"; // Parameter indicating reload action
+          window.open(link + reloadParam, "_blank");
+        });
+      });
+
+      function copyToClipboard(text) {
+        const dummyTextArea = document.createElement("textarea");
+        dummyTextArea.value = text;
+        document.body.appendChild(dummyTextArea);
+        dummyTextArea.select();
+        document.execCommand("copy");
+        document.body.removeChild(dummyTextArea);
+      }
+
+      function updateButtonContent(button) {
+        button.textContent = "Copied!";
+        button.classList.add("btn-success"); // Add Bootstrap success button style
+        button.disabled = true; // Disable the button to prevent further copying
+      }
+    </script>
+
+
   </body>
 </html>
