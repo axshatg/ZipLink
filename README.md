@@ -1,2 +1,4 @@
 # ZipLink!
-ZipLink is a fast and free URL shortening service that quickly transforms complex URLs into convenient and shareable links.
+ZipLink is a speedy and free URL shortening service that simplifies complex URLs into shareable links.
+It offers QR codes alongside the links, enabling quick access through scanning.
+The service streamlines lengthy URLs into manageable formats and facilitates navigation using QR codes.
