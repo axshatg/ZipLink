@@ -25,38 +25,52 @@
       <% if (locals.short_url) { %>
         <div class="url-container">
           <a href="<%= short_url %>"><%= short_url %></a>
-          <button class="btn btn-primary copy-button btn-sm" data-link="<%= short_url %>">Copy</button>
-          <!-- <a href="{<= short_url %>}" class="btn btn-success redirect-button btn-sm" target="_blank">Visit</a> -->
         </div>
 
-        <% if (locals.qr_code_url) { %>
-          <!-- Display the QR code -->
-          <p class="qr-text">Or scan this QR code:</p>
-          <img src="<%= locals.qr_code_url %>" alt="QR Code" class="qr-code" />
-        <% } %>
+        <div class="text-center"> <!-- Add this div for center alignment -->
+          <button class="btn btn-primary copy-button btn-sm" data-link="<%= short_url %>">Copy</button>
+          
+          <!-- Share on WhatsApp Button -->
+          <button class="btn btn-primary whatsapp-button btn-sm" data-link="<%= short_url %>">Share on WhatsApp</button>
+        </div>
+
+       <% if (locals.qr_code_url) { %>
+        <!-- Display the QR code -->
+        <p class="qr-text">Or scan this QR code:</p>
+        <img src="<%= locals.qr_code_url %>" alt="QR Code" class="qr-code" />
+
+        <!-- Download the qr code -->
+        <div class="text-center"> <!-- Add this div for center alignment -->
+          <a class="btn input-submit btn-primary create-button btn-sm" href="<%= locals.qr_code_url %>" download="qrcode.png">Download QR Code</a>
+        </div>
+       <% } %>
       <% } %>
     </div>
 
 
     <script>
       const copyButtons = document.querySelectorAll(".copy-button");
-      // const visitButtons = document.querySelectorAll(".redirect-button");
+      const whatsappButtons = document.querySelectorAll(".whatsapp-button");
 
       copyButtons.forEach(button => {
         button.addEventListener("click", () => {
           const link = button.getAttribute("data-link");
           copyToClipboard(link);
           updateButtonContent(button);
+
+          // Set a timer to re-enable the button after 3 seconds
+          setTimeout(() => {
+            resetButton(button);
+          }, 1000); // 3000 milliseconds = 3 seconds
         });
       });
 
-      // visitButtons.forEach(button => {
-      //   button.addEventListener("click", () => {
-      //     const link = button.getAttribute("href");
-      //     const reloadParam = "?reload=true"; // Parameter indicating reload action
-      //     window.open(link + reloadParam, "_blank");
-      //   });
-      // });
+      whatsappButtons.forEach(button => {
+        button.addEventListener("click", () => {
+          const link = button.getAttribute("data-link");
+          shareOnWhatsApp(link);
+        });
+      });
 
       function copyToClipboard(text) {
         const dummyTextArea = document.createElement("textarea");
@@ -72,8 +86,17 @@
         button.classList.add("btn-success"); // Add Bootstrap success button style
         button.disabled = true; // Disable the button to prevent further copying
       }
+
+      function resetButton(button) {
+        button.textContent = "Copy";
+        button.classList.remove("btn-success"); // Remove Bootstrap success button style
+        button.disabled = false; // Enable the button again
+      }
+
+      function shareOnWhatsApp(link) {
+        const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(link)}`;
+        window.open(whatsappUrl, "_blank");
+      }
     </script>
-
-
   </body>
 </html>
